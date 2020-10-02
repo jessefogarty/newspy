@@ -42,12 +42,3 @@ def meta_data(h:str, *argv) -> list:
             raise ValueError(f'{arg} cannot be parsed.')
 
     return data
-
-
-if __name__ == "__main__":
-    urls = ["https://cbc.ca", "https://cnn.com", "http://thestar.com", "https://torontosun.com"]
-
-    for url in urls:
-        r = requests.get(url)
-        h = r.content
-        print(meta_data(h, "title", "description"))
