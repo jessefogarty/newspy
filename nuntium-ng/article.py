@@ -4,6 +4,7 @@ from source import Source
 from termcolor import cprint
 import requests
 import concurrent.futures
+from newspaper import Article as nArticle
 
 class Articles():
     '''
@@ -64,7 +65,10 @@ class Articles():
 
         
     def retrieve(self) -> list:
-        '''Parse a list of Source.feed strs.
+        '''Retrieve each source feed and parse article urls. Remove duplicates.\n
+        Returns:
+            _articles - a list of unique new article urls\n
+        TODO: inlcude a list of existing urls from the same source to compare agaisnt.
         '''
         _articles = []
         #cprint("Finding new _articles and adding to source.", "yellow")

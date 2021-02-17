@@ -87,7 +87,7 @@ if __name__ == "__main__":
         start_time = time.perf_counter()    
         f = Source(test)
         fin_time = time.perf_counter() - start_time 
-        print(f.df)
+        print(f)
         
         print(f"finished building source in {round(fin_time, 2)} sec. \n")  
 
