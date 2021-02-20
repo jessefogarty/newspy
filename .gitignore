@@ -1,5 +1,9 @@
 # Project specific
 test.py
+nltk_data/
+pyvenv.cfg
+share/jupyter/
+etc/jupyter
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

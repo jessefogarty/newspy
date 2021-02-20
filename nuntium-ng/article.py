@@ -44,20 +44,29 @@ class Articles():
         Returns:
             articles(list) - a list of articles with a dict of each article
         '''
-        def _download(url):
-            '''A function to download the html of a given article.
+        def _download(url) -> object:
+            ''' A function to download and parse the html of a given article.
+                Uses the Aricle class from newspaper3k (a great project)
             '''
-            article = {}
-            response = requests.get(_url)
-            article["url"] = response.url
-            article["html"] = response.content
-            return article
+            article = nArticle(url)
+            try:
+                article.download()
+                article.parse()
+                article.nlp()
+                return article
+            except:
+                article = None
+                return article 
 
         _articles = []
+        _download_errors = []
         with concurrent.futures.ThreadPoolExecutor(max_workers=30) as executor:
             futures = []
             for _url in self.article_list:
-                futures.append(executor.submit(_download, url=_url))
+                if _url is not None:
+                    futures.append(executor.submit(_download, url=_url))
+                else:
+                    _download_errors.append(_url)
             for future in concurrent.futures.as_completed(futures):
                 _articles.append(future.result())
 

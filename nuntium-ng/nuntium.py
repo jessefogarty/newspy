@@ -18,4 +18,12 @@ def main(domain, articles):
     t2 = perf_counter()
     a = Articles(paper.feeds)
     cprint(f"\u2713 Downloaded {len(a.articles)} articles in {round(perf_counter() - t2, 2)} seconds.", "green")
+    tcounter = 0
+    for items in a.articles:
+        tcounter += 1
+        if tcounter < 5:
+            print(f"""
+            cLink: {items.canonical_link}
+            {items.title}
+            by {items.authors}""")
 main()
