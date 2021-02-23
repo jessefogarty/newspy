@@ -4,6 +4,8 @@ nltk_data/
 pyvenv.cfg
 share/jupyter/
 etc/jupyter
+pyvenv.cfg
+lib64/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
