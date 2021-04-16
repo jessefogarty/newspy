@@ -2,11 +2,11 @@
 
 # %% Imports Cell
 import sqlite3
-from pandas import read_sql_query  # type: ignore
+from typing import Any, Mapping
+from pandas import DataFrame, read_sql_query
 import os
-from pandas.core.frame import DataFrame  # type: ignore
 from logger import ArticleLogger
-from pymongo import MongoClient  # type: ignore
+from pymongo import MongoClient # type: ignore
 import sys
 
 #%% OldDatabase Definitions Cell
@@ -50,9 +50,15 @@ class OldDatabase:
         )
 
     def migrate(self, df: DataFrame) -> None:
+        """Insert a DataFrame object into a specifed MongoDB.\n
+        Args:
+            df: DataFrame - a df of the old sqlite database.
+        Returns:
+            _mongo_result: list - list of object_id from insert_many.
+        """
 
         if self.year is int and [2018, 2019, 2020]:  # check for supported years
-            _data_dict: list = self.old_data.to_dict(
+            _data_dict = self.old_data.to_dict(
                 "records"
             )  # Convert data to list of dicts
 
