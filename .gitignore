@@ -1,11 +1,13 @@
 # Project specific
 test.py
 nltk_data/
+OldArticles/raw_articles.db
 pyvenv.cfg
 share/jupyter/
 etc/jupyter
 pyvenv.cfg
 lib64/
+.vscode/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
