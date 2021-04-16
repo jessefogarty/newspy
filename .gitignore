@@ -1,7 +1,8 @@
 # Project specific
 test.py
 nltk_data/
-OldArticles/raw_articles.db
+nuntium/raw_articles.db
+nuntium/*.db
 pyvenv.cfg
 share/jupyter/
 etc/jupyter
