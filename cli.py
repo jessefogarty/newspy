@@ -12,6 +12,8 @@ if year not in [2018, 2019, 2020]:
 db = OldDatabase()
 db.migrate(year)"""
 
-db = OldDatabase()
-db.load(2018)
-db.migrate
+
+if __name__ == "__main__":
+    db = OldDatabase()
+    db.load(2019, "nuntium/raw_articles.db")
+    db.migrate()
