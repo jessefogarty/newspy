@@ -1,15 +1,14 @@
 #!/usr/bin/python3
 
-# %% Imports Cell
 import sqlite3
 from typing import Any, Mapping
 from pandas import DataFrame, read_sql_query
 import os
-from logger import ArticleLogger
-from pymongo import MongoClient # type: ignore
+from logger import ArticleLogger  # type: ignore
+from pymongo import MongoClient  # type: ignore
 import sys
 
-#%% OldDatabase Definitions Cell
+
 class OldDatabase:
 
     FILE_NAME = os.path.abspath("raw_articles.db")
@@ -19,7 +18,7 @@ class OldDatabase:
     def __init__(self) -> None:
         """ Initialize an instance of OldDatabase() with a logger."""
 
-        self.logger = ArticleLogger("OldDatabase")  # initialize a logger object
+        self.logger = ArticleLogger("nuntium")  # initialize a logger object
         self.logger.debug(
             "Class OldDatabase() initialized with default database location %s"
             % (OldDatabase.FILE_NAME)
@@ -29,10 +28,10 @@ class OldDatabase:
 
     def load(self, year: int) -> None:
         """Load a set of old articles from a specified year.\n
-        Args:\n
+        Args:
             year: int - only supports [2018,2019,2020]\n
-        Object:\n
-            self.old_data: DataFrame
+        Returns:
+            None - adds self.old_data to the object
         """
 
         self.year = year  # Set year instance var w/ input
@@ -49,14 +48,13 @@ class OldDatabase:
             "Created %i articles DataFrame. Shape is %s" % (self.year, _old_data_shape)
         )
 
-    def migrate(self, df: DataFrame) -> None:
+    def migrate(self) -> None:
         """Insert a DataFrame object into a specifed MongoDB.\n
-        Args:
-            df: DataFrame - a df of the old sqlite database.
         Returns:
             _mongo_result: list - list of object_id from insert_many.
         """
 
+        # TODO: move this input sanitization to cli.py
         if self.year is int and [2018, 2019, 2020]:  # check for supported years
             _data_dict = self.old_data.to_dict(
                 "records"
@@ -73,22 +71,5 @@ class OldDatabase:
             sys.exit
 
 
-#%% Test Cell
 test = OldDatabase()
 test.load(2018)
-
-#%%
-
-
-# %%
-"""
-if __name__ == "__main__":
-    cli = argparse.ArgumentParser()
-    cli.add_argument("year", help="Select a year (of articles) to import", type=int)
-    cli_args = cli.parse_args()
-    year = cli_args.year
-    if year not in [2018, 2019, 2020]:
-        raise ValueError(f"Input Must Be: 2018, 2019, 2020.")
-    db = OldDatabase()
-    db.migrate(year)
-"""
