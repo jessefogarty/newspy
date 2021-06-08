@@ -1,22 +1,18 @@
 #!/usr/bin/python3
 
 import sqlite3
-from typing import Any, Mapping
-from pandas import DataFrame, read_sql_query
-import os
+from time import strptime
 from pymongo import MongoClient  # type: ignore
-import sys
 import re
 import requests
 from newspaper import fulltext
 import lxml.html
-from concurrent.futures import ThreadPoolExecutor
-from time import sleep
+from datetime import datetime
+
 
 years = [2020]
 
 con = sqlite3.connect("/home/unkwn1/projects/raw_articles.db")
-articles = {}
 
 for y in years:
     cur = con.cursor()
@@ -25,25 +21,60 @@ for y in years:
     ).fetchall()
     article_list = []
 
-    for i, d in enumerate(_d):
-
+    for d in _d:
         _article: dict = {}
-        h = requests.get(d[0]).text
-        doc = lxml.html.fromstring(h)
+        try:
+            r = requests.get(d[0])
+        except:
+            continue
+        # If not valid html doc found skip
+        try:
+            doc = lxml.html.fromstring(r.text)
+        except:
+            continue
 
-        _article["authors"] = d[2]
+        _article["url"] = r.url # absolute url no query str
+        _article["authors"] = str(d[2]).split(", ") # split author string, store as array
         _article["publish_date"] = re.findall(r"(\d+\s\w+\s\d+)", d[1])[0].replace(
             " ", "/"
-        )
-        _article["text"] = fulltext(h)
-        _article["source"] = doc.xpath("//meta[@property='og:site_name']/@content")[0]
-        _article["summary"] = doc.xpath("//meta[@property='og:description']/@content")[
-            0
-        ]
-        _article["title"] = doc.xpath("//meta[@property='og:title']/@content")[0]
-        article_list.append(_article)
+        ) # converting time format from original
+        _article["publish_date"] = datetime.strptime(
+            _article["publish_date"], "%d/%b/%Y"
+        ) # date stored as ISODate() in Mongo
+        _article["text"] = fulltext(r.text) # Use newspaper3k function to get article text from html
+        
+        try:
+            _article["source"] = doc.xpath("//meta[@property='og:site_name']/@content")[
+                0
+            ]
+        except:
+            pass
 
-    articles[y] = article_list
+        try:
+            _article["summary"] = doc.xpath(
+                "//meta[@property='og:description']/@content"
+            )[0]
+        except IndexError:
+            pass
+        try:
+            _article["summary"] = doc.xpath("//meta[@name='description']/@content")[
+                0
+            ]
+        except IndexError:
+            continue
+
+        try: # Title from opengraph tag
+            _article["title"] = doc.xpath("//meta[@property='og:title']/@content")[0]
+        except IndexError:
+            try: # Title from meta tag
+                _article["title"] = doc.xpath("//meta[@name='title']/@content")[0]
+            except IndexError:
+                try: # Title from title html tag
+                    _article["title"] = doc.xpath("//title")[0].text_content()
+                except:
+                    continue
+
+        article_list.append(_article)
 
     _mongo: MongoClient = MongoClient("localhost", 27017)  # Connect to DB
     _mongo_db = _mongo["articles"]  # Init DB
