@@ -10,7 +10,7 @@ import lxml.html
 from datetime import datetime
 
 
-years = [2020]
+years = [2018]
 
 con = sqlite3.connect("/home/unkwn1/projects/raw_articles.db")
 
@@ -21,7 +21,8 @@ for y in years:
     ).fetchall()
     article_list = []
 
-    for d in _d:
+    for io, d in enumerate(_d):
+        
         _article: dict = {}
         try:
             r = requests.get(d[0])

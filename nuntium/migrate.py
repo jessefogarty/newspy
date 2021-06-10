@@ -1,129 +1,95 @@
 #!/usr/bin/python3
 
 import sqlite3
-from typing import Any, Mapping
-from pandas import DataFrame, read_sql_query
-import os
+from time import strptime
 from pymongo import MongoClient  # type: ignore
-import sys
-from nuntium.logger import ArticleLogger
 import re
 import requests
+import subprocess
 from newspaper import fulltext
 import lxml.html
+from datetime import datetime
+import json
 
 
-def get_title(d) -> str:
-    """Extract the title of a webpage."""
-    try:
-        _title = d.xpath("//meta[@property='og:title']/@content")[0]
-    except IndexError:
+years = [2018]
+
+con = sqlite3.connect("/home/unkwn1/projects/raw_articles.db")
+
+for y in years:
+    cur = con.cursor()
+    _d = cur.execute(
+        f"SELECT link, publish_date, authors FROM articles WHERE publish_date LIKE '%{y}%'"
+    ).fetchall()
+    # article_list = []
+
+    urls = [l[0] for l in _d]
+    strUrls = ",".join(str(elem) for elem in urls)
+    htmls = subprocess.run(
+        ["/home/unkwn1/projects/github/nuntium/nuntium/gghtml", f"{strUrls}"],
+        stdout=subprocess.PIPE,
+        text=True,
+    )
+    print(json.loads(htmls.stdout))
+"""
+    for io, d in enumerate(_d):
+        
+        _article: dict = {}
         try:
-            _title = d.xpath("//meta[@name='title']/@content")[0]
+            r = requests.get(d[0])
+        except:
+            continue
+        # If not valid html doc found skip
+        try:
+            doc = lxml.html.fromstring(r.text)
+        except:
+            continue
+
+        _article["url"] = r.url # absolute url no query str
+        _article["authors"] = str(d[2]).split(", ") # split author string, store as array
+        _article["publish_date"] = re.findall(r"(\d+\s\w+\s\d+)", d[1])[0].replace(
+            " ", "/"
+        ) # converting time format from original
+        _article["publish_date"] = datetime.strptime(
+            _article["publish_date"], "%d/%b/%Y"
+        ) # date stored as ISODate() in Mongo
+        _article["text"] = fulltext(r.text) # Use newspaper3k function to get article text from html
+        
+        try:
+            _article["source"] = doc.xpath("//meta[@property='og:site_name']/@content")[
+                0
+            ]
+        except:
+            pass
+
+        try:
+            _article["summary"] = doc.xpath(
+                "//meta[@property='og:description']/@content"
+            )[0]
         except IndexError:
-            _title = d.xpath("//title")[0].text_content()
-    return _title
-
-
-def get_description(d):
-    """Extract the description of a webpage."""
-    try:
-        _desc = d.xpath("//meta[@property='og:description']/@content")[0]
-    except IndexError:
+            pass
         try:
-            _desc = d.xpath("//meta[@name='description']/@content")[0]
-        except:
-            _desc = None
-    return _desc
+            _article["summary"] = doc.xpath("//meta[@name='description']/@content")[
+                0
+            ]
+        except IndexError:
+            continue
 
+        try: # Title from opengraph tag
+            _article["title"] = doc.xpath("//meta[@property='og:title']/@content")[0]
+        except IndexError:
+            try: # Title from meta tag
+                _article["title"] = doc.xpath("//meta[@name='title']/@content")[0]
+            except IndexError:
+                try: # Title from title html tag
+                    _article["title"] = doc.xpath("//title")[0].text_content()
+                except:
+                    continue
 
-class OldDatabase:
+        article_list.append(_article)
 
-    MONGO_URL = "mongodb://172.0.0.1"
-
-    def __init__(self) -> None:
-        """Initialize an instance of OldDatabase() with a logger."""
-
-        self.logger = ArticleLogger("nuntium")  # initialize a logger object
-
-        self.old_data: DataFrame
-
-    def clean_data(self) -> None:
-
-        self.old_data = self.old_data.drop(
-            ["sub_topic", "stopwords", "ner", "source", "topic"], axis=1
-        )
-
-        for i, row in self.old_data.iterrows():
-
-            # Request page  & store html source code
-            h = requests.get(str(row["link"])).text
-
-            doc = lxml.html.fromstring(h)
-
-            # Redownload Article Text
-            a = fulltext(h)
-
-            # Extract meta data from OpenGraph tags
-
-            t, d = get_title(doc), get_description(doc)
-
-            p = doc.xpath("//meta[@property='og:site_name']/@content")
-
-            if len(p) == 1:
-                self.old_data.at[i, "source"] = p[0]
-
-            self.old_data.at[i, "title"] = t
-
-            self.old_data.at[i, "summary"] = d
-
-            self.old_data.at[i, "content"] = a
-
-            # fix date to DD/MMM/YYYY
-            # eg 10/MAR/1990M
-            self.old_data.at[i, "publish_date"] = re.findall(
-                r"(\d+\s\w+\s\d+)", row["publish_date"]
-            )[0].replace(" ", "/")
-
-    def load(self, year: int, fp: str) -> None:
-        """Load a set of old articles from a specified year.\n
-        Args:
-            year: int - only supports [2018,2019,2020]
-            fp: str - path to sqlite3 database file\n
-        Returns:
-            None - adds self.old_data to the object
-        """
-        _fp = os.path.abspath(fp)
-        self.year = year  # Set year instance var w/ input
-
-        _con = sqlite3.connect(_fp)
-        self.logger.debug(
-            "Class OldDatabase() initialized with default database location %s" % (_fp)
-        )
-
-        self.old_data = read_sql_query(
-            f"SELECT * FROM articles WHERE publish_date LIKE '%{self.year}%'", con=_con
-        )
-        self.old_data.replace("", "None", inplace=True)  # Fill empty cells
-        _old_data_shape: tuple[int, int] = self.old_data.shape  # df shape for logger
-
-        self.logger.debug(
-            "Created %i articles DataFrame. Shape is %s" % (self.year, _old_data_shape)
-        )
-
-    def migrate(self) -> None:
-        """Insert a DataFrame object into a specifed MongoDB.\n
-        Returns:
-            _mongo_result: list - list of object_id from insert_many.
-        """
-
-        try:
-            _data_dict = self.old_data.to_dict(
-                "records"
-            )  # Convert data to list of dicts
-
-            
-            print(self.old_data)
-        except:
-            self.logger.critical(f"Failed to add {self.year} articles to MongoDB.")
-            sys.exit
+    _mongo: MongoClient = MongoClient("localhost", 27017)  # Connect to DB
+    _mongo_db = _mongo["articles"]  # Init DB
+    _mongo_collection = _mongo_db[f"from_{y}"]  # init collection
+    _mongo_collection.insert_many(article_list)
+"""
