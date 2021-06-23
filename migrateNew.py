@@ -4,6 +4,7 @@ import sqlite3
 from typing import Any, Mapping
 from pandas import DataFrame, read_sql_query
 import os
+import subprocess
 from pymongo import MongoClient  # type: ignore
 import sys
 import re
@@ -13,9 +14,12 @@ import lxml.html
 from concurrent.futures import ThreadPoolExecutor
 from time import sleep
 
-years = [2020]
 
-con = sqlite3.connect("/home/unkwn1/projects/raw_articles.db")
+go_parser = "/home/unkwn1/GitHub/Python/nuntium/nuntium/gghtml"
+
+years = [2018]
+
+con = sqlite3.connect("/home/unkwn1/Documents/raw_articles.db")
 articles = {}
 
 for y in years:
@@ -24,7 +28,13 @@ for y in years:
         f"SELECT link, publish_date, authors FROM articles WHERE publish_date LIKE '%{y}%'"
     ).fetchall()
     article_list = []
+    links = [l[0] for l in _d]
+    str_links = ",".join(l for l in links)
 
+
+    html = subprocess.run([go_parser, str_links], stdout=subprocess.PIPE)
+    print(html.stdout)
+"""
     for i, d in enumerate(_d):
 
         _article: dict = {}
@@ -49,3 +59,4 @@ for y in years:
     _mongo_db = _mongo["articles"]  # Init DB
     _mongo_collection = _mongo_db[f"from_{y}"]  # init collection
     _mongo_collection.insert_many(article_list)
+"""
