@@ -1,8 +1,7 @@
 # Project specific
 test.py
+raw_articles.db
 nltk_data/
-nuntium/raw_articles.db
-nuntium/*.db
 pyvenv.cfg
 share/jupyter/
 etc/jupyter
@@ -11,6 +10,7 @@ lib64/
 .vscode/
 .vscode
 .vim/
+Dockerfile
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
