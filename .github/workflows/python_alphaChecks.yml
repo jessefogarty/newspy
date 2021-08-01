@@ -1,4 +1,4 @@
-name: Nuntium - Old Database - MongoTest
+name: Python - Type & Coding Checks
 
 on:
   push:

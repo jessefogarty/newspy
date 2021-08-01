@@ -36,4 +36,5 @@ tldextract
 toml
 tqdm
 typing-extensions
+types-requests
 urllib3
