@@ -2,7 +2,7 @@
 
 > A tool to migrate an old news database from sqlite -> mongo
 
-![Python - Type & Coding Checks](https://github.com/jessefogarty/nuntium/actions/workflows/python_alphaChecks.yml/badge.svg?branch=old-database&event=push)](https://github.com/jessefogarty/nuntium/actions/workflows/python_alphaChecks.yml)
+[![Python - Type & Coding Checks](https://github.com/jessefogarty/nuntium/actions/workflows/python_alphaChecks.yml/badge.svg?branch=old-database&event=push)](https://github.com/jessefogarty/nuntium/actions/workflows/python_alphaChecks.yml)
 ![Python3](https://img.shields.io/badge/python-3.6%20|%203.7%20|%203.8%20|%203.9-green)
 
 
