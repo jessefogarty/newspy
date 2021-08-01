@@ -2,7 +2,9 @@
 
 > A tool to migrate an old news database from sqlite -> mongo
 
-![Python3](https://img.shields.io/badge/python-3.5%20|%203.6%20|%203.7%20|%203.8%20|%203.9-green)
+![Python - Type & Coding Checks](https://github.com/jessefogarty/nuntium/actions/workflows/python_alphaChecks.yml/badge.svg?branch=old-database&event=push)](https://github.com/jessefogarty/nuntium/actions/workflows/python_alphaChecks.yml)
+![Python3](https://img.shields.io/badge/python-3.6%20|%203.7%20|%203.8%20|%203.9-green)
+
 
 Nuntium was initially started as a news scraping project. Created and run mainly during 2019, the databse grew to over 150,000 articles from Canadian news outlets. As my idea for the project changed so to did nuntium.
 
