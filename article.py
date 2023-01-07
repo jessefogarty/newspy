@@ -8,11 +8,13 @@ import requests
 from newspaper import fulltext
 import re
 from prettytable import PrettyTable as pt
-from network import download
+from network import download_html
+from utils import SchemaParser
 class Article():
     def __init__(self, url:str, html:str, title:str = "", summary:str = "", authors:list[str] = [], publish_date:str = "", text:str = "") -> None:
         self._url = url
         self._html = html
+        self._schema_tags:list = []
         self._title = title
         self._summary = summary
         self._authors = authors
@@ -27,13 +29,28 @@ class Article():
         '''
         Parse the article
         '''
+        self._schema_tags = await SchemaParser(self._html)
         _doc = lxml.html.fromstring(self._html)
         self._title = await self._get_title(_doc)
         self._publish_date = await self._get_publish_date(_doc)
-        #self._summary = await self._get_summary()
+        self._summary = await self._get_summary()
         #self._authors = await self._get_authors(_doc)
-        
-        self._text = await self._get_text()
+        try:
+            self._text = await self._get_text()
+        except:
+            pass
+
+    async def _get_summary(self):
+        '''
+        Get the summary
+        '''
+        if len(self._schema_tags) > 0:
+            for tag in self._schema_tags:
+                try:
+                    return tag["description"]
+                except:
+                    pass
+            #return self._schema_tags.get("description")
 
     async def _get_text(self):
         '''
