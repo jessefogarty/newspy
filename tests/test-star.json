@@ -1,0 +1,137 @@
+{
+    "json-ld": [
+        {
+            "@context": "http://schema.org",
+            "@type": [
+                "Article",
+                "ReportageNewsArticle"
+            ],
+            "description": "Grappling with the biggest flood of Cuban migrants in decades, the United States reopened their long-closed legal pathway on Wednesday by resuming all visa services at its embassy in Havana. ",
+            "articleSection": "Americas",
+            "datePublished": "2023-01-04",
+            "dateModified": "2023-01-05T01:23:53.245Z",
+            "mainEntityOfPage": "https://www.thestar.com/news/world/americas/2023/01/04/us-reopening-visa-and-consular-services-at-embassy-in-cuba.html",
+            "headline": "Facing migration flood, U.S. resumes services at Cuba embassy",
+            "alternativeHeadline": "Facing migration flood, US resumes services at Cuba embassy",
+            "isPartOf": {
+                "@type": [
+                    "CreativeWork",
+                    "Product"
+                ],
+                "name": "Toronto Star",
+                "productID": "thestar.com:basic"
+            },
+            "publisher": {
+                "@type": "NewsMediaOrganization",
+                "name": "Toronto Star",
+                "sameAs": "https://www.thestar.com",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://www.thestar.com/assets/img/thestar-logo.png",
+                    "width": "277",
+                    "height": "44"
+                }
+            },
+            "publishingPrinciples": "https://www.thestar.com/about/aboutus.html",
+            "image": {
+                "@type": "ImageObject",
+                "url": "https://images.thestar.com/9zyU2LEixqtwAemG1H9S6kgLxvw=/1280x1024/smart/filters:cb(1672866953056):format(webp)/https://www.thestar.com/content/dam/thestar/news/world/americas/2023/01/04/facing-migration-flood-us-resumes-services-at-cuba-embassy/2023010400010-63b5080066345f68c19f0ef3jpeg.jpg",
+                "width": 1280,
+                "height": 1024
+            },
+            "isAccessibleForFree": false,
+            "hasPart": {
+                "@type": "WebPageElement",
+                "isAccessibleForFree": false,
+                "cssSelector": ".hideRegistration"
+            },
+            "speakable": {
+                "@type": "SpeakableSpecification",
+                "cssSelector": [
+                    ".c-article-headline__heading",
+                    ".speakable-text-block-container"
+                ],
+                "url": "https://www.thestar.com/news/world/americas/2023/01/04/us-reopening-visa-and-consular-services-at-embassy-in-cuba.html?utm_source=speakable&utm_medium=push",
+                "mainEntityOfPage": "https://www.thestar.com/news/world/americas/2023/01/04/us-reopening-visa-and-consular-services-at-embassy-in-cuba.html?utm_source=speakable&utm_medium=push"
+            }
+        },
+        {
+            "@context": "http://schema.org",
+            "@graph": [
+                {
+                    "@context": "http://schema.org",
+                    "@type": "NewsMediaOrganization",
+                    "name": "Toronto Star",
+                    "url": "https://www.thestar.com",
+                    "sameAs": [
+                        "https://www.facebook.com/torontostar",
+                        "https://twitter.com/TorontoStar",
+                        "https://www.youtube.com/TorontoStar",
+                        "https://plus.google.com/+torontostar",
+                        "https://www.instagram.com/thetorontostar",
+                        "https://en.wikipedia.org/wiki/Toronto_Star"
+                    ],
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://www.thestar.com/assets/img/thestar-logo.png",
+                        "width": "277",
+                        "height": "44"
+                    },
+                    "actionableFeedbackPolicy": "https://www.thestar.com/about/aboutus.html#c11",
+                    "parentOrganization": {
+                        "@type": "NewsMediaOrganization",
+                        "name": "Torstar Corporation",
+                        "url": "https://www.torstar.com/index.cfm",
+                        "logo": {
+                            "@type": "ImageObject",
+                            "url": "https://www.torstar.com/images/layout/torStarLogo6.png",
+                            "width": 228,
+                            "height": 217
+                        }
+                    },
+                    "alternateName": [
+                        "the star",
+                        "thestar",
+                        "toronto star",
+                        "torontostar",
+                        "the toronto star"
+                    ]
+                },
+                {
+                    "@context": "http://schema.org",
+                    "@type": "WebSite",
+                    "url": "https://www.thestar.com/",
+                    "potentialAction": {
+                        "@type": "SearchAction",
+                        "target": "https://www.thestar.com/search.html?q={search_term_string}",
+                        "query-input": "required name=search_term_string"
+                    }
+                },
+                {
+                    "@context": "http://schema.org",
+                    "@type": "BreadcrumbList",
+                    "itemListElement": [
+                        {
+                            "@type": "ListItem",
+                            "item": "https://www.thestar.com/news.html",
+                            "name": "News",
+                            "position": 1
+                        },
+                        {
+                            "@type": "ListItem",
+                            "item": "https://www.thestar.com/news/world.html",
+                            "name": "World",
+                            "position": 2
+                        },
+                        {
+                            "@type": "ListItem",
+                            "item": "https://www.thestar.com/news/world/americas.html",
+                            "name": "Americas",
+                            "position": 3
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

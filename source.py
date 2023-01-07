@@ -10,6 +10,8 @@ import os
 from bs4 import BeautifulSoup as bs
 import time
 from network import download
+from article import Article
+from utils import SchemaParser
 
 CBC_RSS = ["https://rss.cbc.ca/lineup/world.xml","https://rss.cbc.ca/lineup/topstories.xml"]
 
@@ -23,13 +25,15 @@ class Source():
         self._feeds = ["https://rss.cbc.ca/lineup/world.xml","https://rss.cbc.ca/lineup/topstories.xml"]
         self._new_articles: list[tuple[str, str]]= [] # list of tuples (url, html)
 
-    def update(self):
+    async def update(self):
         '''
         Update the source
         '''
-        asyncio.run(self.get_new_articles())
+        async with aiohttp.ClientSession() as _session:
+            self._new_articles = await self.get_new_articles(_session)
 
-    async def get_new_articles(self, save=True) -> list[str]:
+
+    async def get_new_articles(self, session) -> list:
         '''
         Read the rss feeds and return a list of html sources for each article
         '''
@@ -37,19 +41,19 @@ class Source():
             '''
             Read the feed and return a list of links
             '''
-            _, _html = await download(feed_url, _session)
+            _, _html = await download(feed_url, session)
             soup = bs(_html, "lxml-xml")
             links = [link.text for link in soup.find_all("link")][2:]
             return links
-        async with aiohttp.ClientSession() as _session:
-            _article_urls = await asyncio.gather(*[_read_feed(url) for url in self._feeds])      
-            articles = [await asyncio.gather(*[download(link, _session) for link in feed]) for feed in _article_urls]
-            if save != True:
-                return articles
-            self._new_articles = articles
+
+        _article_urls = await asyncio.gather(*[_read_feed(url) for url in self._feeds])      
+        articles: list = [await asyncio.gather(*[download(link, session) for link in feed]) for feed in _article_urls]
+        return articles
 
 if __name__ == "__main__":
     _source = Source()
     #_data = asyncio.run(_source.get_new_articles(save=False))
-    _source.update()
-    print(_source.__dict__)
+    asyncio.run(_source.update())
+    for article in _source._new_articles:
+        for url, html in article:
+            print(SchemaParser(html).run())

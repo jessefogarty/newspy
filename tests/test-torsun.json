@@ -1,0 +1,49 @@
+{
+    "json-ld": [
+        {
+            "@context": "http://schema.org",
+            "@type": "WebPage",
+            "name": "Toronto Sun",
+            "headline": "Toronto Sun",
+            "isAccessibleForFree": true,
+            "url": "https://torontosun.com",
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://torontosun.com/search/?search_text={search_term}",
+                "query-input": "required name=search_term"
+            }
+        },
+        {
+            "@context": "http://schema.org",
+            "@type": "Organization",
+            "legalName": "Toronto Sun",
+            "url": "https://torontosun.com",
+            "description": "",
+            "address": [
+                {
+                    "@type": "PostalAddress",
+                    "streetAddress": "365 Bloor Street E, 6th Floor",
+                    "addressLocality": "Toronto",
+                    "addressRegion": "Ontario",
+                    "postalCode": "M4W 3L4",
+                    "addressCountry": "Canada"
+                }
+            ],
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://dcs-static.gprod.postmedia.digital/12.6.1/websites/images/identity/logo-identity-tsun.svg"
+            },
+            "sameAs": [
+                "https://www.instagram.com/torontosunonline/",
+                "https://twitter.com/TheTorontoSun",
+                "https://www.youtube.com/channel/UCkjNuLzfw5Ep7EJuMdeFylw",
+                "https://www.facebook.com/torontosun/"
+            ]
+        },
+        {
+            "@context": "http://schema.org",
+            "@type": "ItemList",
+            "itemListElement": []
+        }
+    ]
+}

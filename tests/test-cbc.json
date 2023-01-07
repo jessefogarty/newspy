@@ -1,0 +1,95 @@
+{
+    "json-ld": [
+        {
+            "image": [
+                {
+                    "datePublished": "2021-05-18T22:25Z",
+                    "@type": "ImageObject",
+                    "name": "Rapid COVID Tests",
+                    "description": "Rapid COVID tests were used on 4,500 students at two Montreal high schools between January and May. Only five cases were detected.",
+                    "dateModified": "2021-05-18T22:24Z",
+                    "@context": "http://schema.org/",
+                    "url": "https://i.cbc.ca/1.5916783.1621376678!/cumulusImage/httpImage/rapid-covid-tests.jpg"
+                },
+                {
+                    "datePublished": "2021-05-18T22:21Z",
+                    "@type": "ImageObject",
+                    "name": "Caroline Quach",
+                    "description": "Dr. Caroline Quach from Ste-Justine Children's Hospital led the study.",
+                    "dateModified": "2021-05-18T22:21Z",
+                    "@context": "http://schema.org/",
+                    "url": "https://i.cbc.ca/1.6031572.1621376469!/fileImage/httpImage/caroline-quach.jpg"
+                }
+            ],
+            "author": [
+                {
+                    "workLocation": {
+                        "@type": "Place",
+                        "name": "Montreal",
+                        "@context": "http://schema.org/"
+                    },
+                    "image": {
+                        "datePublished": "2018-05-10T19:23Z",
+                        "@type": "ImageObject",
+                        "name": "Steve Rukavina",
+                        "description": "",
+                        "dateModified": "2018-05-10T19:23Z",
+                        "@context": "http://schema.org/",
+                        "url": "https://i.cbc.ca/1.3985516.1525980215!/fileImage/httpImage/steve-rukavina.jpg"
+                    },
+                    "contactPoint": {
+                        "@type": "ContactPoint",
+                        "@context": "http://schema.org/",
+                        "url": "https://www.cbc.ca/news/canada/montreal/author/steve-rukavina-1.4308129",
+                        "email": "stephen.j.rukavina@cbc.ca"
+                    },
+                    "@type": "Person",
+                    "jobTitle": "Journalist",
+                    "name": "Steve Rukavina",
+                    "description": "Steve Rukavina has been with CBC News in Montreal since 2002. In 2019, he won a RTDNA award for continuing coverage of sexual misconduct allegations at Concordia University. He's also a co-creator of the podcast, Montreapolis.\r\nBefore working in Montreal he worked as a reporter for CBC in Regina and Saskatoon. You can reach him at stephen.j.rukavina@cbc.ca.",
+                    "@context": "http://schema.org/",
+                    "sameAs": [
+                        "https://twitter.com/Steverukavina"
+                    ]
+                }
+            ],
+            "@type": "ReportageNewsArticle",
+            "description": "The results of a study that looked at the effectiveness of rapid COVID-19 tests in two Montreal high schools found the tests could be effective in areas where outbreaks were already suspected, but were far less effective as a blanket preventive tool used randomly",
+            "alternateName": "Lead researcher Dr. Caroline Quach says rapid tests missed cases in asymptomatic students",
+            "dateModified": "2021-05-19T09:00Z",
+            "@context": "http://schema.org/",
+            "datePublished": "2021-05-19T09:00Z",
+            "dateCreated": "2021-05-19T09:00Z",
+            "name": "Montreal study shows rapid COVID-19 tests have limited effectiveness in schools",
+            "publisher": {
+                "foundingDate": "1936-11-02T05:00Z",
+                "ethicsPolicy": "https://www.cbc.ca/news/about-cbc-news-1.1294364",
+                "verificationFactCheckingPolicy": "https://www.cbc.ca/news/about-cbc-news-1.1294364",
+                "@type": "NewsMediaOrganization",
+                "@context": "http://schema.org/",
+                "ownershipFundingInfo": "https://www.cbc.ca/news/about-cbc-news-1.1294364",
+                "actionableFeedbackPolicy": "https://www.cbc.ca/news/about-cbc-news-1.1294364",
+                "missionCoveragePrioritiesPolicy": "https://www.cbc.ca/news/about-cbc-news-1.1294364",
+                "diversityPolicy": "https://www.cbc.ca/news/about-cbc-news-1.1294364",
+                "masthead": "https://www.cbc.ca/news/about-cbc-news-1.1294364",
+                "diversityStaffingReport": "https://www.cbc.ca/news/about-cbc-news-1.1294364",
+                "unnamedSourcesPolicy": "https://www.cbc.ca/news/about-cbc-news-1.1294364",
+                "correctionsPolicy": "https://www.cbc.ca/news/about-cbc-news-1.1294364"
+            },
+            "headline": "Montreal study shows rapid COVID-19 tests have limited effectiveness in schools",
+            "articleSection": "Montreal",
+            "thumbnailUrl": "https://i.cbc.ca/1.5916783.1621376678!/cumulusImage/httpImage/rapid-covid-tests.jpg"
+        },
+        {
+            "@context": "http://schema.org/",
+            "@type": "WebPage",
+            "speakable": {
+                "@type": "SpeakableSpecification",
+                "cssSelector": [
+                    ".detailHeadline",
+                    ".detailSummary"
+                ]
+            }
+        }
+    ]
+}
