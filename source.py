@@ -34,17 +34,24 @@ class Source():
             '''
             Read the feed and return a list of links
             '''
-            _html = await download_html(feed_url, session)
-            soup = bs(_html, "lxml-xml")
-            links = [link.text for link in soup.find_all("link")][2:]
-            return links
+            try:
+                _html = await download_html(feed_url, session)
+                soup = bs(_html, "lxml-xml")
+                links = [link.text for link in soup.find_all("link")][2:]
+                return links
+            except:
+                logging.error(f"Failed to read feed: {feed_url}")
+                return []
 
         async with aiohttp.ClientSession() as _session:
             for feed in self._feeds:
                 self._last_fetch_urls.extend(await _read_feed(feed, _session))
-        
-        async with aiohttp.ClientSession() as _session:
-            await self.download_articles(_session)
+            with self.download_articles(_session) as _article:
+            for url in self._last_fetch_urls:
+                _html = await download_html(url, _session)
+                _article = Article(url, _html)
+                await _article.parse()
+                self._last_fetch_articles.append(_article)
 
 
     async def download_articles(self, session):
@@ -52,8 +59,10 @@ class Source():
         Read the rss feeds and return a list of html sources for each article
         '''
         for url in self._last_fetch_urls:
-            _html = await download_html(url, session)
-            self._last_fetch_articles.append(Article(url, _html))
+                _html = await download_html(url, session)
+                _article = Article(url, _html)
+                await _article.parse()
+                yield _article
 
         
     
@@ -62,7 +71,7 @@ if __name__ == "__main__":
     _source = Source()
     #_data = asyncio.run(_source.get_new_articles(save=False))
     asyncio.run(_source.update())
-    print(_source._last_fetch_articles)
+    print(_source._last_fetch_articles[0].__dict__)
     #print(_source._new_articles)
     #for article in _source._new_articles:
         #for url, html in article:

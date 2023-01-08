@@ -10,21 +10,9 @@ import re
 import extruct
 import json
 
-class SchemaParser():
+async def SchemaParser(html:str) -> list:
 
-    def __init__(self, data):
-        self._data = self._read_in(data)
-        self.tags = self.run()
-
-    def run(self):
-        return asyncio.run(self.find_tags(self._data))
-    def _read_in(self, data):
-        return extruct.extract(
-                data,
-                syntaxes=["json-ld"], uniform=True
-                )["json-ld"][0]
-
-    async def _parse_tag(self, sdict:dict):
+    async def _parse_tag(sdict:dict):
         _tag = {}
         _child_tags = []
         _type = sdict.get("@type")
@@ -40,15 +28,23 @@ class SchemaParser():
             elif type(v) is dict:
                 _child_tags.append(v)
         return _tag, _child_tags
-
-    async def find_tags(self, data):
+    
+    async def _find_tags(_data):
         _tags = []
-        _tag, _children = await self._parse_tag(self._data)
+        _tag, _children = await _parse_tag(_data)
         _tags.append(_tag)
         if len(_children) > 0:
             for child in _children:
-                _tag, _ = await self._parse_tag(child)
+                _tag, _ = await _parse_tag(child)
                 _tags.append(_tag)
         return _tags
+
+    _data = extruct.extract(
+                html,
+                syntaxes=["json-ld"], uniform=True
+                )["json-ld"][0]
+    _tags = await _find_tags(_data)
+    return _tags 
+
 
 

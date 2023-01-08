@@ -25,6 +25,12 @@ class Article():
         return f"""Article({self._title}, 
         {self._publish_date}, 
         {self._url},)"""
+    async def download(self):
+        '''
+        Download the article
+        '''
+        async with aiohttp.ClientSession() as _session:
+            self._html = await download_html(self._url, _session)
     async def parse(self):
         '''
         Parse the article
